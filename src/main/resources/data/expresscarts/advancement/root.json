@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "id": "expresscarts:minecart"
+        },
+        "title": {
+            "translate": "advancements.expresscarts.root.title"
+        },
+        "description": {
+            "translate": "advancements.expresscarts.root.description"
+        },
+        "background": "minecraft:textures/block/cobbled_deepslate.png",
+        "frame": "task",
+        "show_toast": true,
+        "announce_to_chat": true,
+        "hidden": false
+    },
+    "criteria": {
+        "tick": {
+            "trigger": "minecraft:tick"
+        }
+    }
+}

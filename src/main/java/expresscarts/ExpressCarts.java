@@ -27,6 +27,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
+import java.util.Map;
 
 public class ExpressCarts implements ModInitializer {
     public static final String MOD_ID = "expresscarts";
@@ -40,6 +41,14 @@ public class ExpressCarts implements ModInitializer {
                     .build(ResourceKey.create(BuiltInRegistries.ENTITY_TYPE.key(),
                             Identifier.fromNamespaceAndPath(ExpressCarts.MOD_ID, "minecart"))));
 
+    public static final EntityType<ExpressChestMinecartEntity> EXPRESS_CHEST_MINECART_ENTITY = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            Identifier.fromNamespaceAndPath(ExpressCarts.MOD_ID, "chest_minecart"),
+            EntityType.Builder.of(ExpressChestMinecartEntity::new, MobCategory.MISC).noLootTable()
+                    .sized(0.98F, 0.7F).passengerAttachments(0.1875F).clientTrackingRange(8)
+                    .build(ResourceKey.create(BuiltInRegistries.ENTITY_TYPE.key(),
+                            Identifier.fromNamespaceAndPath(ExpressCarts.MOD_ID, "chest_minecart"))));
+
     @Override
     public void onInitialize() {
         ModMetadata metadata = FabricLoader.getInstance().getModContainer(ExpressCarts.MOD_ID).orElseThrow().getMetadata();
@@ -49,11 +58,13 @@ public class ExpressCarts implements ModInitializer {
                 .build();
 
         PolymerEntityUtils.registerType(EXPRESS_MINECART_ENTITY);
+        PolymerEntityUtils.registerType(EXPRESS_CHEST_MINECART_ENTITY);
         PolymerResourcePackUtils.addModAssets(ExpressCarts.MOD_ID);
 
         ModItems.initialize();
 
         DispenserBlock.registerBehavior(ModItems.EXPRESS_MINECART, new MinecartDispenseItemBehavior(EXPRESS_MINECART_ENTITY));
+        DispenserBlock.registerBehavior(ModItems.EXPRESS_CHEST_MINECART, new MinecartDispenseItemBehavior(EXPRESS_CHEST_MINECART_ENTITY));
 
         CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
             dispatcher.register(Commands.literal("expresscarts").executes(context -> {
@@ -81,6 +92,8 @@ public class ExpressCarts implements ModInitializer {
                         metadata.getVersion().getFriendlyString())
                 )
                 .append("\nCurrent Configuration:\n")
+                .append(Component.translatable("expresscarts.command.expresscarts.config.header.minecart"))
+                .append("\n")
                 .append(Component.translatable("expresscarts.command.expresscarts.config.maxMinecartSpeed", ExpressCartsConfig.maxMinecartSpeed))
                 .append("\n")
                 .append(Component.translatable("expresscarts.command.expresscarts.config.waterSpeedMultiplier", ExpressCartsConfig.waterSpeedMultiplier))
@@ -95,12 +108,26 @@ public class ExpressCarts implements ModInitializer {
                 .append("\n")
                 .append(Component.translatable("expresscarts.command.expresscarts.config.loadChunks", String.valueOf(ExpressCartsConfig.loadChunks)))
                 .append("\n")
-                .append(buildBlockOverridesMessage());
+                .append(buildBlockOverridesMessage(ExpressCartsConfig.blockSpeedMultipliers))
+                .append("\n")
+                .append(Component.translatable("expresscarts.command.expresscarts.config.header.chestMinecart"))
+                .append("\n")
+                .append(Component.translatable("expresscarts.command.expresscarts.config.chestMaxMinecartSpeed", ExpressCartsConfig.chestMaxMinecartSpeed))
+                .append("\n")
+                .append(Component.translatable("expresscarts.command.expresscarts.config.chestWaterSpeedMultiplier", ExpressCartsConfig.chestWaterSpeedMultiplier))
+                .append("\n")
+                .append(Component.translatable("expresscarts.command.expresscarts.config.chestBrakingEnabled", String.valueOf(ExpressCartsConfig.chestBrakingEnabled)))
+                .append("\n")
+                .append(Component.translatable("expresscarts.command.expresscarts.config.chestBrakeSlowdown", ExpressCartsConfig.chestBrakeSlowdown))
+                .append("\n")
+                .append(Component.translatable("expresscarts.command.expresscarts.config.chestFastUnpoweredSlowdown", String.valueOf(ExpressCartsConfig.chestFastUnpoweredSlowdown)))
+                .append("\n")
+                .append(Component.translatable("expresscarts.command.expresscarts.config.chestLoadChunks", String.valueOf(ExpressCartsConfig.chestLoadChunks)))
+                .append("\n")
+                .append(buildBlockOverridesMessage(ExpressCartsConfig.chestBlockSpeedMultipliers));
     }
 
-    Component buildBlockOverridesMessage() {
-        var overrides = ExpressCartsConfig.blockSpeedMultipliers;
-
+    Component buildBlockOverridesMessage(Map<Block, Double> overrides) {
         if (overrides.isEmpty()) {
             return Component.translatable("expresscarts.command.expresscarts.config.blockSpeedMultipliers.none");
         }

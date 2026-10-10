@@ -29,9 +29,12 @@ import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 import java.util.List;
 import java.util.Optional;
 
-public class ExpressMinecartEntity extends Minecart implements PolymerEntity {
+public class ExpressMinecartEntity extends Minecart implements PolymerEntity, ExpressCart {
     private ChunkPos ticketChunkPos;
     private Long ticketTimer = 0L;
+    private double rideDistance = 0.0;
+    private Vec3 lastRidePos = null;
+    private boolean longRideMilestoneAwarded = false;
 
     public ExpressMinecartEntity(EntityType<?> entityType, Level level) {
         super(entityType, level);
@@ -105,6 +108,34 @@ public class ExpressMinecartEntity extends Minecart implements PolymerEntity {
                     this.ticketTimer = placeTicket(serverLevel, chunkPos);
                 }
             }
+        }
+
+        // Track how far this cart has travelled in the current continuous ride, for the "long ride"
+        // advancement. Resets whenever nobody is riding, so it represents one uninterrupted trip.
+        if (this.getFirstPassenger() instanceof ServerPlayer player) {
+            if (this.lastRidePos == null) {
+                this.lastRidePos = this.position();
+            } else {
+                this.rideDistance += this.position().distanceTo(this.lastRidePos);
+                this.lastRidePos = this.position();
+
+                if (!this.longRideMilestoneAwarded && this.rideDistance >= RideMilestones.MILESTONE_DISTANCE) {
+                    this.longRideMilestoneAwarded = true;
+                    RideMilestones.awardExpressLongRide(player, this.rideDistance);
+                }
+            }
+        } else {
+            this.rideDistance = 0.0;
+            this.lastRidePos = null;
+            this.longRideMilestoneAwarded = false;
+        }
+    }
+
+    @Override
+    protected void addPassenger(Entity passenger) {
+        super.addPassenger(passenger);
+        if (passenger instanceof ServerPlayer player) {
+            RideMilestones.awardFirstRide(player);
         }
     }
 

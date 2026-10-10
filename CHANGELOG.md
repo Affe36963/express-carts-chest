@@ -1,1 +1,3 @@
-- Added support for Minecraft 26.3
+- Added the Express Chest Minecart, crafted from a normal chest minecart and a redstone torch, with its own independent set of config options (`chestMaxMinecartSpeed`, `chestWaterSpeedMultiplier`, `chestBrakingEnabled`, `chestBrakeSlowdown`, `chestFastUnpoweredSlowdown`, `chestLoadChunks`, `chestBlockSpeedMultipliers`); it uses vanilla fall damage rather than a separate configurable multiplier, has its own distinct in-world appearance (a trapped chest instead of a plain minecart), and its own container screen title
+- Added in-game advancements explaining what the mod does and how to craft each cart (an automatically-granted root advancement plus one advancement per cart, granted on first obtaining that item)
+- Fixed an oversight that unintentionally prevented the mod from functioning in singleplayer

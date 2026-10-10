@@ -1,0 +1,23 @@
+{
+    "parent": "expresscarts:root",
+    "display": {
+        "icon": {
+            "id": "minecraft:minecart"
+        },
+        "title": {
+            "translate": "advancements.expresscarts.vanilla_long_ride.title"
+        },
+        "description": {
+            "translate": "advancements.expresscarts.vanilla_long_ride.description"
+        },
+        "frame": "challenge",
+        "show_toast": true,
+        "announce_to_chat": true,
+        "hidden": true
+    },
+    "criteria": {
+        "milestone": {
+            "trigger": "minecraft:impossible"
+        }
+    }
+}

@@ -14,6 +14,10 @@ public class ModItems {
             settings -> new ExpressMinecartItem(ExpressCarts.EXPRESS_MINECART_ENTITY, settings, Items.MINECART),
             new Item.Properties().stacksTo(1));
 
+    public static final Item EXPRESS_CHEST_MINECART = register("chest_minecart",
+            settings -> new ExpressMinecartItem(ExpressCarts.EXPRESS_CHEST_MINECART_ENTITY, settings, Items.CHEST_MINECART),
+            new Item.Properties().stacksTo(1));
+
     public static Item register(String name, Function<Item.Properties, Item> itemFactory, Item.Properties properties) {
         // Create the item key.
         ResourceKey<Item> itemKey = ResourceKey.create(BuiltInRegistries.ITEM.key(), Identifier.fromNamespaceAndPath(ExpressCarts.MOD_ID, name));

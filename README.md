@@ -37,20 +37,25 @@ An Express Minecart can be crafted using a normal minecart and a redstone torch.
 The Express Minecart item will be seen by Vanilla players as a normal minecart item with an enchantment glint,
 and players with the Polymer-generated resource pack will see a custom item texture.
 
-Only a normal (passenger) minecart variant is available, not any of the other Vanilla minecart types.
-It is used exactly like normal, it just has twice the maximum speed and substantially improved physics behaviours.
+An Express Chest Minecart can likewise be crafted using a normal chest minecart and a redstone torch, and behaves the
+same way as an Express Minecart, just with a chest attached. It has its own independent set of configuration options,
+so its speed and other behaviours can be tuned separately from the passenger Express Minecart.
 
-When placed in the world, an Express Minecart will appear as a minecart with a red carpet inside, to distinguish it from a normal minecart.
+Only the normal (passenger) and chest minecart variants are available, not any of the other Vanilla minecart types.
+Both are used exactly like normal, they just have (by default) twice the maximum speed and substantially improved physics behaviours.
+
+When placed in the world, an Express Minecart or Express Chest Minecart will appear as a minecart with a red carpet inside, to distinguish it from a normal minecart.
 
 ### Braking
 
-If the configuration option `brakingEnabled` is `true` (the default), a player can hold their backwards movement key
-while inside an Express Minecart to slow the minecart down. The acceleration applied is configurable.
+If the configuration option `brakingEnabled` (or `chestBrakingEnabled` for chest minecarts) is `true` (the default),
+a player can hold their backwards movement key while riding the cart to slow it down. The acceleration applied is configurable.
 
 ## Configuration
 
 Express Carts can be configured by using the commands under `/config expresscarts` (`/cconfig expresscarts` in singleplayer),
-or by editing `config/expresscarts/config.json` while the server is stopped. The following configuration options are available:
+or by editing `config/expresscarts/config.json` while the server is stopped. The following configuration options are available
+for the Express Minecart:
 
 - `maxMinecartSpeed` (default 16): The maximum speed that can be reached by Express Minecarts, in blocks per second.
 - `waterSpeedMultiplier` (default 0.5): The scaling factor applied to an Express Minecart's maximum speed when it is in water.
@@ -60,6 +65,10 @@ or by editing `config/expresscarts/config.json` while the server is stopped. The
 - `loadChunks` (default `false`): Load chunks around Express Minecarts, in the same way as ender pearls.
 - `fallDamageMultiplier` (default 1.0): Fall damage multiplier for an Express Minecart's passengers.
 - `blockSpeedMultipliers`: A map from block ids (e.g. `minecraft:dirt`) to multiplier values for the maximum cart speed if the rail is placed on that block.
+
+The Express Chest Minecart has an identical, independently-configurable set of options (except for fall damage,
+which uses vanilla behaviour), each prefixed with `chest`: `chestMaxMinecartSpeed`, `chestWaterSpeedMultiplier`,
+`chestBrakingEnabled`, `chestBrakeSlowdown`, `chestFastUnpoweredSlowdown`, `chestLoadChunks`, and `chestBlockSpeedMultipliers`.
 
 ## Version Support
 
